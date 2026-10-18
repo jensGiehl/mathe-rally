@@ -1486,6 +1486,9 @@ button:disabled {
     top: 106px;
     max-width: 300px;
   }
+  .play-column:not(:fullscreen) .game-frame:not(:fullscreen) .question-panel {
+    top: 80px;
+  }
   .question-panel h2 {
     font-size: 35px;
   }
@@ -1621,6 +1624,9 @@ button:disabled {
   .question-panel {
     top: 117px;
     max-width: 345px;
+  }
+  .play-column:not(:fullscreen) .game-frame:not(:fullscreen) .question-panel {
+    top: 90px;
   }
   .question-panel h2 {
     font-size: 40px;

@@ -19,6 +19,8 @@ Ein Kopfrechen-Spiel für die Klassen 1 bis 4: Fahre durch eine bunte Landschaft
 
 Das Spiel passt sich an kleine und große Bildschirme an. Auf dem Smartphone lässt es sich mit den Daumen bedienen. Ab der 10. Aufgabe steigt das Tempo langsam an.
 
+Im Fenstermodus steht die Aufgabe ab Tabletbreite direkt unter der Statusanzeige, damit mehr von der Strecke sichtbar bleibt.
+
 ## Aufgaben und Punkte
 
 - **Kleines Einmaleins:** Faktoren von 1 bis 10.
