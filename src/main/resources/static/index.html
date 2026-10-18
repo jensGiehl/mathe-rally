@@ -1,0 +1,536 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#eef5ed" />
+    <meta
+      name="description"
+      content="Deine kleine Auszeit mit Köpfchen: Rechne, lenke und knacke den Highscore bei Mathe Rallye."
+    />
+    <title>Mathe Rallye · Rechne dich nach vorn.</title>
+    <link rel="icon" href="/images/favicon.svg" type="image/svg+xml" />
+    <link
+      rel="stylesheet"
+      href="/webjars/bootstrap/5.3.8/css/bootstrap.min.css"
+    />
+    <link rel="stylesheet" href="/css/style.css" />
+    <script type="module" src="/js/app.js"></script>
+  </head>
+  <body>
+    <div class="page-shell">
+      <header
+        class="site-header d-flex align-items-center justify-content-between"
+      >
+        <a class="brand" href="/" aria-label="Mathe Rallye Startseite">
+          <span class="brand-mark" aria-hidden="true"
+            ><svg viewBox="0 0 32 32">
+              <path d="M8 26V7m0 1c6-6 10 5 17-1v13c-7 6-11-5-17 1" />
+              <path
+                d="M13 7v5m6-2v5m5-6v5M9 15l4-3 6 3 5-1"
+                class="flag-detail"
+              /></svg
+          ></span>
+          <span
+            >mathe<span class="brand-light">rallye</span
+            ><span class="brand-dot">.</span></span
+          >
+        </a>
+        <nav
+          class="d-flex align-items-center gap-2 gap-sm-4"
+          aria-label="Hauptnavigation"
+        >
+          <button class="nav-link help-trigger" type="button">
+            So geht’s <span aria-hidden="true">↗</span>
+          </button>
+          <button class="btn leaderboard-trigger nav-score" type="button">
+            <span aria-hidden="true"
+              ><svg viewBox="0 0 24 24" aria-hidden="true">
+                <path
+                  d="M7 3h10v6a5 5 0 0 1-10 0V3Zm0 2H3v3a4 4 0 0 0 5 4m9-7h4v3a4 4 0 0 1-5 4m-4 2v5m-4 2h8"
+                /></svg
+            ></span>
+            Bestenliste
+          </button>
+        </nav>
+      </header>
+
+      <main>
+        <section
+          class="intro d-flex flex-wrap align-items-end justify-content-between gap-3"
+        >
+          <div>
+            <p class="eyebrow">
+              <span></span> KLEINE AUFGABEN. GROSSES ABENTEUER.
+            </p>
+            <h1>Rechne dich <span>nach vorn.</span></h1>
+            <p class="intro-copy">
+              Drei Spuren, eine richtige Antwort. Wie weit kommst du?
+            </p>
+          </div>
+          <span class="class-badge"
+            ><svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="m3 9 9-5 9 5-9 5-9-5Zm4 3v6c3 2 7 2 10 0v-6M21 9v7" />
+            </svg>
+            Für kleine Köpfe mit großen Ideen <strong>Klasse 1–4</strong></span
+          >
+        </section>
+
+        <div class="rally-layout">
+          <section class="play-column" aria-label="Rallye-Spiel">
+            <div class="game-frame" id="game-frame">
+              <canvas
+                id="road"
+                aria-label="Straße mit drei Spuren in einer grünen Berglandschaft"
+              ></canvas>
+              <div class="game-vignette"></div>
+              <div class="hud">
+                <div class="hud-stats">
+                  <div>
+                    <span>PUNKTE</span><strong id="hud-score">0</strong>
+                  </div>
+                  <i></i>
+                  <div>
+                    <span>STRECKE</span
+                    ><strong
+                      ><span id="hud-distance">0</span> <small>m</small></strong
+                    >
+                  </div>
+                  <i></i>
+                  <div class="hud-boost">
+                    <span>BOOST</span><strong id="hud-boost">× 1,5</strong>
+                  </div>
+                </div>
+                <div class="hud-actions">
+                  <button
+                    class="icon-button"
+                    id="sound-toggle"
+                    aria-label="Ton einschalten"
+                    aria-pressed="false"
+                    title="Ton einschalten"
+                    type="button"
+                  >
+                    <svg viewBox="0 0 24 24">
+                      <path d="m11 5-6 4H2v6h3l6 4V5ZM16 9l5 6m0-6-5 6" />
+                    </svg></button
+                  ><button
+                    class="icon-button"
+                    id="pause-toggle"
+                    aria-label="Spiel pausieren"
+                    title="Pause (P)"
+                    type="button"
+                    hidden
+                  >
+                    Ⅱ</button
+                  ><button
+                    class="icon-button"
+                    id="fullscreen-toggle"
+                    aria-label="Vollbild"
+                    title="Vollbild"
+                    type="button"
+                  >
+                    <svg viewBox="0 0 24 24">
+                      <path d="M8 3H3v5m13-5h5v5M3 16v5h5m13-5v5h-5" />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+              <div class="landscape-label">
+                <span></span> ALPENPANORAMA
+                <span class="landscape-weather">☀ 24°</span>
+              </div>
+              <div class="start-screen" id="start-screen">
+                <span class="start-kicker">DIE STRASSE GEHÖRT DIR</span>
+                <h2>Kopf an.<br />Abenteuer los.</h2>
+                <p>Finde die Lösung. Nimm die richtige Spur.</p>
+                <button class="btn btn-rally start-trigger" type="button">
+                  Rallye starten <span aria-hidden="true">→</span></button
+                ><span class="start-note"
+                  >Ohne Anmeldung. Mit jeder Menge Fahrspaß.</span
+                >
+              </div>
+              <div class="question-panel" id="question-panel" hidden>
+                <span class="question-count" id="question-count"
+                  >AUFGABE 1</span
+                >
+                <h2 id="question-prompt" aria-live="polite"></h2>
+                <div
+                  class="answer-lanes"
+                  id="answer-lanes"
+                  role="group"
+                  aria-label="Antwortspur auswählen"
+                ></div>
+                <div class="round-track"><span id="round-progress"></span></div>
+              </div>
+              <div
+                class="feedback"
+                id="feedback"
+                role="status"
+                aria-live="polite"
+              ></div>
+              <div class="turbo-flash" id="turbo-flash" hidden>
+                <span>TURBO!</span>
+              </div>
+              <div class="pause-screen" id="pause-screen" hidden>
+                <span class="pause-symbol">Ⅱ</span>
+                <h2>Kleine Verschnaufpause.</h2>
+                <p>Deine Rallye wartet auf dich.</p>
+                <button id="resume-button" class="btn btn-rally" type="button">
+                  Weiterfahren <span aria-hidden="true">→</span>
+                </button>
+              </div>
+              <svg
+                class="windshield"
+                id="windshield"
+                viewBox="0 0 1000 650"
+                preserveAspectRatio="none"
+                aria-hidden="true"
+                hidden
+              ></svg>
+              <div class="game-bottom">
+                <span class="stage-pill" id="stage-pill"
+                  ><span></span> BEREIT, WENN DU ES BIST</span
+                ><span class="stage-tip" id="stage-tip"
+                  >Deine nächste Bestleistung wartet.</span
+                >
+              </div>
+            </div>
+            <div class="driving-controls">
+              <div class="control-group">
+                <button
+                  class="key touch-steer"
+                  data-direction="-1"
+                  aria-label="Eine Spur nach links"
+                  type="button"
+                >
+                  ←</button
+                ><button
+                  class="key touch-steer"
+                  data-direction="1"
+                  aria-label="Eine Spur nach rechts"
+                  type="button"
+                >
+                  →</button
+                ><span>Spur wechseln</span>
+              </div>
+              <div class="control-group">
+                <button
+                  class="key"
+                  id="turbo-button"
+                  aria-label="Turbo zur nächsten Aufgabe"
+                  type="button"
+                >
+                  ↑</button
+                ><span>Turbo zur Aufgabe</span>
+              </div>
+              <span class="keyboard-note"
+                ><span class="key key-small">P</span> Pause</span
+              >
+            </div>
+            <div class="adventure-note">
+              <span class="note-icon" aria-hidden="true">✦</span>
+              <p>
+                Mit Köpfchen kommst du weiter.<br /><span
+                  >Ab Aufgabe 10 zieht das Tempo langsam an. Du schaffst
+                  das!</span
+                >
+              </p>
+              <span class="road-doodle" aria-hidden="true">↝</span>
+            </div>
+          </section>
+
+          <aside class="setup-column">
+            <section class="settings-card">
+              <div class="card-heading">
+                <span class="section-number">01</span>
+                <h2>Deine Rallye</h2>
+                <span class="small-spark" aria-hidden="true">✳</span>
+              </div>
+              <fieldset id="settings-fields">
+                <legend class="field-label">Was möchtest du üben?</legend>
+                <div class="operation-grid">
+                  <label class="operation-option"
+                    ><input
+                      type="checkbox"
+                      name="operation"
+                      value="MULTIPLICATION"
+                      checked
+                    /><span class="operation-symbol">×</span
+                    ><span>Kleines 1×1<small>Malnehmen</small></span
+                    ><span class="selection-check">✓</span></label
+                  >
+                  <label class="operation-option"
+                    ><input
+                      type="checkbox"
+                      name="operation"
+                      value="ADDITION"
+                    /><span class="operation-symbol">+</span
+                    ><span>Plus<small>Addieren</small></span
+                    ><span class="selection-check">✓</span></label
+                  >
+                  <label class="operation-option"
+                    ><input
+                      type="checkbox"
+                      name="operation"
+                      value="SUBTRACTION"
+                    /><span class="operation-symbol">−</span
+                    ><span>Minus<small>Subtrahieren</small></span
+                    ><span class="selection-check">✓</span></label
+                  >
+                  <label class="operation-option"
+                    ><input
+                      type="checkbox"
+                      name="operation"
+                      value="DIVISION"
+                    /><span class="operation-symbol">÷</span
+                    ><span>Geteilt<small>1×1 rückwärts</small></span
+                    ><span class="selection-check">✓</span></label
+                  >
+                </div>
+                <p class="field-hint">Du kannst auch Rechenarten mischen.</p>
+                <div class="range-setting">
+                  <label class="field-label" for="number-range"
+                    >Zahlenraum <small>für Plus &amp; Minus</small></label
+                  ><select class="form-select" id="number-range">
+                    <option value="20">Bis 20 · erster Rechenspaß</option>
+                    <option value="100" selected>
+                      Bis 100 · schon ganz groß
+                    </option>
+                    <option value="1000">Bis 1.000 · für Rechenprofis</option>
+                  </select>
+                </div>
+                <span class="field-label speed-label" id="speed-label"
+                  >Wie schnell darf’s sein?</span
+                >
+                <div
+                  class="speed-options"
+                  role="radiogroup"
+                  aria-labelledby="speed-label"
+                >
+                  <label
+                    ><input type="radio" name="speed" value="RELAXED" /><span
+                      ><svg viewBox="0 0 32 24" aria-hidden="true">
+                        <path
+                          d="M7 18c0-9 16-9 16 0H7Zm-3 0h23M9 18v3m12-3v3M24 16l3-6 3 2v6h-5"
+                        />
+                        <path d="m12 11 4 7 4-7" /></svg
+                      ><strong>Entspannt</strong><small>× 1 Punkte</small></span
+                    ></label
+                  >
+                  <label
+                    ><input
+                      type="radio"
+                      name="speed"
+                      value="NORMAL"
+                      checked
+                    /><span
+                      ><svg viewBox="0 0 32 24" aria-hidden="true">
+                        <path
+                          d="m5 16 3-8h15l4 8M3 16h26v5H3v-5Zm7-8 2-4h8l3 4M8 21v2m16-2v2M8 17h3m10 0h3"
+                        /></svg
+                      ><strong>Flott</strong><small>× 1,5 Punkte</small></span
+                    ></label
+                  >
+                  <label
+                    ><input type="radio" name="speed" value="FAST" /><span
+                      ><svg viewBox="0 0 32 24" aria-hidden="true">
+                        <path
+                          d="m18 2 8 8-12 12-6-6L18 2ZM9 15l-6-1 6-5 5 1m3 7 1 5 5-6-1-5M8 20l-4 3"
+                        />
+                        <circle cx="20" cy="8" r="2" /></svg
+                      ><strong>Rasant</strong><small>× 2 Punkte</small></span
+                    ></label
+                  >
+                </div>
+              </fieldset>
+              <p class="settings-lock" id="settings-lock" hidden>
+                Einstellungen gelten für die nächste Rallye.
+              </p>
+              <button
+                class="btn btn-rally w-100 start-trigger sidebar-start"
+                type="button"
+              >
+                Los geht’s <span aria-hidden="true">→</span>
+              </button>
+              <p class="settings-footnote">
+                <span aria-hidden="true">⌁</span> Mehr Tempo. Mehr Punkte. Mehr
+                Nervenkitzel.
+              </p>
+            </section>
+            <section class="leaderboard-card">
+              <div class="card-heading">
+                <span class="trophy-icon" aria-hidden="true"
+                  ><svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path
+                      d="M7 3h10v6a5 5 0 0 1-10 0V3Zm0 2H3v3a4 4 0 0 0 5 4m9-7h4v3a4 4 0 0 1-5 4m-4 2v5m-4 2h8"
+                    /></svg
+                ></span>
+                <h2>Die Überflieger</h2>
+                <button
+                  class="text-button leaderboard-trigger"
+                  type="button"
+                  aria-label="Bestenliste öffnen"
+                >
+                  ↗
+                </button>
+              </div>
+              <div id="sidebar-scores" class="score-list">
+                <p class="empty-scores">
+                  Die Straße wartet auf ihren ersten Champion.
+                </p>
+              </div>
+              <div class="leaderboard-footer">
+                <span>Jede Rallye zählt.</span
+                ><button class="text-button leaderboard-trigger" type="button">
+                  Alle Rekorde <span aria-hidden="true">→</span>
+                </button>
+              </div>
+            </section>
+          </aside>
+        </div>
+      </main>
+      <footer class="site-footer">
+        <span>Ein bisschen Mathe. Ein großes Stück Abenteuer.</span
+        ><span>Mit Köpfchen unterwegs <span aria-hidden="true">✳</span></span>
+      </footer>
+    </div>
+    <dialog id="help-dialog" class="rally-dialog" aria-labelledby="help-title">
+      <button
+        class="dialog-close"
+        data-close
+        aria-label="Schließen"
+        type="button"
+      >
+        ×
+      </button>
+      <p class="eyebrow">SO FUNKTIONIERT’S</p>
+      <h2 id="help-title">Die richtige Spur<br />beginnt im Kopf.</h2>
+      <ol class="help-steps">
+        <li>
+          <span>1</span>
+          <div>
+            <strong>Mach die Strecke zu deiner.</strong>
+            <p>
+              Wähle eine oder mehrere Rechenarten und dein Tempo. Für Plus und
+              Minus kannst du den Zahlenraum einstellen.
+            </p>
+          </div>
+        </li>
+        <li>
+          <span>2</span>
+          <div>
+            <strong>Rechne. Lenke. Triff die Lösung.</strong>
+            <p>
+              Wechsle mit ← und → die Spur. Auf dem Handy nutzt du die Tasten
+              unter dem Spiel oder tippst auf eine Antwort.
+            </p>
+          </div>
+        </li>
+        <li>
+          <span>3</span>
+          <div>
+            <strong>Bereit? Gib kurz Turbo!</strong>
+            <p>
+              Mit ↑ springst du schneller zur Antwort. Ab Aufgabe 10 steigt das
+              Tempo behutsam. P oder Escape pausiert.
+            </p>
+          </div>
+        </li>
+        <li>
+          <span>4</span>
+          <div>
+            <strong>Knack deinen Rekord.</strong>
+            <p>
+              Bei einer falschen Antwort endet die Fahrt. Strecke, gelöste
+              Aufgaben und Tempo bringen Punkte. Trage dich danach mit einem
+              Spitznamen ein!
+            </p>
+          </div>
+        </li>
+      </ol>
+      <button class="btn btn-rally w-100" data-close type="button">
+        Alles klar, los geht’s <span aria-hidden="true">→</span>
+      </button>
+    </dialog>
+    <dialog
+      id="leaderboard-dialog"
+      class="rally-dialog"
+      aria-labelledby="leaderboard-title"
+    >
+      <button
+        class="dialog-close"
+        data-close
+        aria-label="Schließen"
+        type="button"
+      >
+        ×
+      </button>
+      <p class="eyebrow">DIE BESTEN AUF DER STRECKE</p>
+      <h2 id="leaderboard-title">Große Köpfe.<br />Große Rekorde.</h2>
+      <p class="dialog-copy">Die besten drei Rallyes und dein letzter Platz.</p>
+      <div id="full-scores" class="score-list full-scores"></div>
+      <p class="score-explanation">
+        Alle Rechenarten und Tempostufen teilen sich eine Bestenliste. Höheres
+        Tempo bringt einen größeren Punkte-Boost.
+      </p>
+    </dialog>
+    <dialog
+      id="result-dialog"
+      class="rally-dialog result-dialog"
+      aria-labelledby="result-title"
+    >
+      <p class="eyebrow" id="result-kicker">WAS FÜR EINE FAHRT!</p>
+      <h2 id="result-title">Jede Rallye macht<br />dich ein Stück besser.</h2>
+      <p class="crash-answer" id="crash-answer"></p>
+      <div class="result-score">
+        <strong id="result-score">0</strong><span>PUNKTE</span>
+      </div>
+      <div class="result-stats">
+        <span><strong id="result-distance">0 m</strong> Strecke</span
+        ><span><strong id="result-solved">0</strong> Aufgaben gelöst</span>
+      </div>
+      <form id="score-form">
+        <label class="field-label" for="player-name"
+          >Dein Name für die Bestenliste</label
+        >
+        <div class="name-row">
+          <input
+            class="form-control"
+            id="player-name"
+            name="name"
+            maxlength="24"
+            minlength="1"
+            autocomplete="nickname"
+            placeholder="Dein Spitzname"
+            required
+          /><button class="btn btn-rally" id="save-score" type="submit">
+            Eintragen <span aria-hidden="true">↗</span>
+          </button>
+        </div>
+        <p class="field-hint">
+          Dein Name wird hier ein Jahr lang in einem Cookie gemerkt.
+        </p>
+      </form>
+      <p
+        id="save-status"
+        class="save-status"
+        role="status"
+        aria-live="polite"
+      ></p>
+      <div id="result-scores" class="score-list" hidden></div>
+      <button class="btn btn-rally w-100" id="play-again" type="button">
+        Noch eine Runde <span aria-hidden="true">↻</span></button
+      ><button class="result-back text-button" id="back-to-setup" type="button">
+        Zurück zu den Einstellungen
+      </button>
+    </dialog>
+    <div class="toast-message" id="toast" role="alert" hidden></div>
+    <canvas
+      id="confetti"
+      class="confetti"
+      popover="manual"
+      aria-hidden="true"
+      hidden
+    ></canvas>
+  </body>
+</html>
