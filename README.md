@@ -16,10 +16,13 @@ Ein Kopfrechen-Spiel für die Klassen 1 bis 4: Fahre durch eine bunte Landschaft
 | P oder Escape | Spiel pausieren / fortsetzen |
 | Bildschirmtasten | Spurwechsel und Turbo auf Smartphone und Tablet |
 | Ton-Schalter | Spieleffekte ein- oder ausschalten |
+| Hintergrundmusik | Leise Musik unabhängig von den Spieleffekten zuschalten |
 
 Das Spiel passt sich an kleine und große Bildschirme an. Auf dem Smartphone lässt es sich mit den Daumen bedienen. Ab der 10. Aufgabe steigt das Tempo langsam an.
 
 Im Fenstermodus steht die Aufgabe ab Tabletbreite direkt unter der Statusanzeige, damit mehr von der Strecke sichtbar bleibt.
+
+Die dezente Hintergrundmusik lässt sich in den Einstellungen separat zuschalten und ist standardmäßig ausgeschaltet. Die Auswahl wird lokal auf dem Gerät gespeichert. Die Musik spielt nur während der Fahrt, pausiert bei einer Spielpause oder beim Wechsel in einen anderen Browser-Tab und endet mit dem Spiel. Sie wird direkt im Browser über Web Audio erzeugt; Musikdownloads und externe Dienste sind dafür nicht erforderlich. Der Ton-Schalter in der Fahransicht steuert weiterhin die Spieleffekte unabhängig davon.
 
 ## Aufgaben und Punkte
 

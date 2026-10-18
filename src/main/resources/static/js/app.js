@@ -1,4 +1,5 @@
 import { RoadRenderer } from "./road.js";
+import { RallyMusic } from "./music.js";
 
 const $ = (selector) => document.querySelector(selector);
 const $$ = (selector) => [...document.querySelectorAll(selector)];
@@ -180,6 +181,7 @@ class Leaderboard {
 class RallyGame {
   api = new RallyApi();
   sound = new RallySound();
+  music = new RallyMusic();
   state = "idle";
   game = null;
   lane = 1;
@@ -238,6 +240,12 @@ class RallyGame {
       } catch {
         this.toast("Dein Browser unterstützt hier leider keinen Ton.");
       }
+    });
+    $("#music-toggle").checked = this.music.enabled;
+    $("#music-toggle").addEventListener("change", () => {
+      this.music.setEnabled($("#music-toggle").checked);
+      $("#music-toggle").blur();
+      this.prepareMusic();
     });
     $("#fullscreen-toggle").addEventListener("click", async () => {
       try {
@@ -303,6 +311,7 @@ class RallyGame {
       if (document.hidden) this.pause();
     });
     window.addEventListener("blur", () => this.pause());
+    window.addEventListener("pagehide", () => this.music.stop());
     $$('input[name="speed"]').forEach((input) =>
       input.addEventListener("change", () => {
         if (this.state === "idle")
@@ -317,6 +326,26 @@ class RallyGame {
     dialog.showModal();
   }
 
+  async prepareMusic() {
+    try {
+      await this.music.prepare();
+      this.updateMusic();
+    } catch {
+      this.music.setEnabled(false);
+      $("#music-toggle").checked = false;
+      this.toast("Die Musik konnte nicht starten. Schalte sie erneut ein.");
+    }
+  }
+
+  updateMusic() {
+    this.music.update(
+      ["running", "waiting"].includes(this.state) &&
+        !this.pauseRequested &&
+        !document.hidden &&
+        !$("dialog[open]"),
+    );
+  }
+
   async start() {
     if (this.state !== "idle") return;
     const operations = $$('input[name="operation"]:checked').map(
@@ -326,6 +355,7 @@ class RallyGame {
       this.toast("Wähle mindestens eine Rechenart für deine Rallye.");
       return;
     }
+    this.prepareMusic();
     this.state = "starting";
     this.pauseRequested = false;
     this.lockSettings(true);
@@ -362,6 +392,7 @@ class RallyGame {
       document.activeElement?.blur();
       if (this.pauseRequested || document.hidden || $("dialog[open]"))
         this.pause();
+      this.updateMusic();
     } catch (error) {
       this.state = "idle";
       this.lockSettings(false);
@@ -424,6 +455,7 @@ class RallyGame {
   }
 
   pause() {
+    this.music.stop();
     if (["starting", "waiting"].includes(this.state)) {
       this.pauseRequested = true;
       return;
@@ -446,6 +478,7 @@ class RallyGame {
     document.activeElement?.blur();
     if (this.pendingAnswer) this.submitAnswer();
     else this.state = "running";
+    this.prepareMusic();
   }
 
   frame(now) {
@@ -523,6 +556,7 @@ class RallyGame {
       this.showQuestion();
       if (this.pauseRequested || document.hidden || $("dialog[open]"))
         this.pause();
+      this.updateMusic();
     } catch (error) {
       if ([404, 410].includes(error.status)) {
         this.reset();
@@ -532,6 +566,7 @@ class RallyGame {
         return;
       }
       this.state = "paused";
+      this.music.stop();
       $("#pause-screen h2").textContent = "Kurzer Boxenstopp.";
       $("#pause-screen p").textContent = error.message;
       $("#resume-button").innerHTML =
@@ -556,6 +591,7 @@ class RallyGame {
 
   crash(question, correctAnswer) {
     this.state = "crashed";
+    this.music.stop();
     this.turbo = false;
     $("#question-panel").hidden = true;
     $("#pause-toggle").hidden = true;
@@ -737,6 +773,7 @@ class RallyGame {
   }
 
   reset() {
+    this.music.stop();
     clearTimeout(this.crashTimer);
     cancelAnimationFrame(this.confettiFrame);
     $("#confetti").hidePopover?.();

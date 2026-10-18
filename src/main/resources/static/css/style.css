@@ -749,6 +749,53 @@ button:disabled {
   font-size: 8px;
   color: #9aa28f;
 }
+.music-setting {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 58px;
+  margin: 18px 0 0;
+  padding: 7px 12px;
+  border: 1px solid #e4e9dc;
+  border-radius: 8px;
+  background: #f7f9f1;
+}
+.music-setting .form-check-input {
+  order: 2;
+  flex-shrink: 0;
+  float: none;
+  width: 2.5em;
+  height: 1.4em;
+  margin: 0;
+  border-color: #a7b298;
+  cursor: pointer;
+}
+.music-setting .form-check-input:checked {
+  background-color: #6b874c;
+  border-color: #6b874c;
+}
+.music-setting .form-check-input:focus {
+  border-color: #90a968;
+  box-shadow: 0 0 0 0.2rem #9aaf6e25;
+}
+.music-setting .form-check-label {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 44px;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1.5;
+  cursor: pointer;
+}
+.music-setting small {
+  display: block;
+  margin-top: 3px;
+  color: #7c8972;
+  font-size: 9px;
+  font-weight: 400;
+}
 .sidebar-start {
   margin-top: 21px;
   justify-content: space-between;
